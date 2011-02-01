@@ -58,13 +58,13 @@ module AssetID
     end
     
     def self.s3_config
-      @@config ||= YAML.load_file(File.join(Rails.root, "config/asset_id.yml"))[Rails.env] rescue nil || {}
+      @@config ||= Settings.s3 rescue nil || {}
     end
     
     def self.connect_to_s3
       AWS::S3::Base.establish_connection!(
-        :access_key_id => s3_config['access_key_id'],
-        :secret_access_key => s3_config['secret_access_key']
+        :access_key_id => s3_config.access_key_id,
+        :secret_access_key => s3_config.secret_access_key
       )
     end
     
@@ -81,7 +81,7 @@ module AssetID
     end
     
     def self.s3_bucket
-      s3_config['bucket']
+      s3_config.bucket
     end
     
     def self.fingerprint(path)
